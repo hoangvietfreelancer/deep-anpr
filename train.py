@@ -200,16 +200,7 @@ def train(learn_rate, report_steps, batch_size, initial_weights=None):
             print("{} {} <-> {} {}".format(vec_to_plate(c), pc,vec_to_plate(b), float(pb)))
         num_p_correct = numpy.sum(r[2] == r[3])
 
-        print ("B{:3d} {:2.02f}% {:02.02f}% loss: {} "
-               "(digits: {}, presence: {}) |{}|").format(
-            batch_idx,
-            100. * num_correct / (len(r[0])),
-            100. * num_p_correct / len(r[2]),
-            r[6],
-            r[4],
-            r[5],
-            "".join("X "[numpy.array_equal(b, c) or (not pb and not pc)]
-                                           for b, c, pb, pc in zip(*r_short)))
+        print("B{:3d} {:2.02f}% {:02.02f}% loss: {} (digits: {}, presence: {}) |{}|".format(batch_idx, 100. * num_correct / (len(r[0])), 100. * num_p_correct / len(r[2]), r[6], r[4], r[5],  "".join("X "[numpy.array_equal(b, c) or (not pb and not pc)] for b, c, pb, pc in zip(*r_short))))
 
     def do_batch():
         sess.run(train_step,
