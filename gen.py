@@ -282,7 +282,7 @@ def generate_ims():
 
 
 if __name__ == "__main__":
-    if os.path.isdir("/test") == True:
+    if os.path.isdir("/test") == False:
         os.mkdir("test")
     im_gen = itertools.islice(generate_ims(), int(sys.argv[1]))
     for img_idx, (im, c, p) in enumerate(im_gen):
