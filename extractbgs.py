@@ -57,7 +57,7 @@ def extract_backgrounds(archive_name):
         Name of the .tar file containing JPEGs of background images.
 
     """
-    if os.path.isdir("/bgs") == False:
+    if os.path.isdir("bgs") == False:
         os.mkdir("bgs")
 
     t = tarfile.open(name=archive_name)
