@@ -156,17 +156,29 @@ def make_affine_transform(from_shape, to_shape,
 
     return M, out_of_bounds
 
+def cal_text_width(char_ims, code, spacing, type):
+    if type == 1 or type == 4:
+        text_width = sum(char_ims[c].shape[1] for c in code[-6:]) + 5 * spacing
+    elif type == 2:
+        text_width = sum(char_ims[c].shape[1] for c in code[:5]) + 4 * spacing
+    elif type == 3:
+        text_width = sum(char_ims[c].shape[1] for c in code[-4:]) + 3 * spacing
+    else:
+        text_width = sum(char_ims[c].shape[1] for c in code) + len(code) * spacing
+    return text_width
 
 def generate_code():
-    return "{}{}{}{} {}{}{}".format(
-        random.choice(common.LETTERS),
+    return "{}{} {}{}{}{}{}{}".format(
+        random.choice(common.DIGITS),
+        random.choice(common.DIGITS),
+        
         random.choice(common.LETTERS),
         random.choice(common.DIGITS),
         random.choice(common.DIGITS),
-        random.choice(common.LETTERS),
-        random.choice(common.LETTERS),
-        random.choice(common.LETTERS))
-
+        random.choice(common.DIGITS),
+        random.choice(common.DIGITS),
+        random.choice(common.DIGITS),
+    )
 
 def rounded_rect(shape, radius):
     out = numpy.ones(shape)
@@ -184,16 +196,14 @@ def rounded_rect(shape, radius):
 
 
 def generate_plate(font_height, char_ims):
-    h_padding = random.uniform(0.2, 0.4) * font_height
+    h_padding = random.uniform(0.1, 0.15) * font_height
     v_padding = random.uniform(0.1, 0.3) * font_height
-    spacing = font_height * random.uniform(-0.05, 0.05)
+    spacing = font_height * random.uniform(0, 0.05)
     radius = 1 + int(font_height * 0.1 * random.random())
 
     code = generate_code()
-    text_width = sum(char_ims[c].shape[1] for c in code)
-    text_width += (len(code) - 1) * spacing
-
-    out_shape = (int(font_height + v_padding * 2),
+    text_width = cal_text_width(char_ims, code, spacing, 2)
+    out_shape = (int(font_height + v_padding*2),
                  int(text_width + h_padding * 2))
 
     text_color, plate_color = pick_colors()
@@ -202,17 +212,22 @@ def generate_plate(font_height, char_ims):
     
     x = h_padding
     y = v_padding 
-    for c in code:
+    for idx, c in enumerate(code):
         char_im = char_ims[c]
         ix, iy = int(x), int(y)
         text_mask[iy:iy + char_im.shape[0], ix:ix + char_im.shape[1]] = char_im
         x += char_im.shape[1] + spacing
+        if idx == 4:
+            y += char_im.shape[0] + v_padding
+            x = h_padding
+            spacing = spacing * 2.5
 
     plate = (numpy.ones(out_shape) * plate_color * (1. - text_mask) +
              numpy.ones(out_shape) * text_color * text_mask)
-
-    return plate, rounded_rect(out_shape, radius), code.replace(" ", "")
-
+    code = code[:5] + " " + code[5:]
+    code  =  code + "  "
+    assert len(code) == 12
+    return plate, rounded_rect(out_shape, radius), code
 
 def generate_bg(num_bg_images):
     found = False
@@ -282,8 +297,11 @@ def generate_ims():
 
 
 if __name__ == "__main__":
-    if os.path.isdir("test") == False:
-        os.mkdir("test")
+    # os.mkdir("test")
+    # if os.path.isdir("test") == False:
+    #     os.mkdir("test")
+    if not os.path.isdir('test'):
+        os.mkdir("test/")
     im_gen = itertools.islice(generate_ims(), int(sys.argv[1]))
     for img_idx, (im, c, p) in enumerate(im_gen):
         fname = "test/{:08d}_{}_{}.png".format(img_idx, c,

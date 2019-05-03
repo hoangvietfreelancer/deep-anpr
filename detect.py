@@ -73,7 +73,7 @@ def detect(im, param_vals):
 
     :returns:
         Iterable of `bbox_tl, bbox_br, letter_probs`, defining the bounding box
-        top-left and bottom-right corners respectively, and a 7,36 matrix
+        top-left and bottom-right corners respectively, and a 8,36 matrix
         giving the probability distributions of each letter.
 
     """
@@ -104,7 +104,7 @@ def detect(im, param_vals):
             letter_probs = (y_val[0,
                                   window_coords[0],
                                   window_coords[1], 1:].reshape(
-                                    7, len(common.CHARS)))
+                                    8, len(common.CHARS)))
             letter_probs = common.softmax(letter_probs)
 
             img_scale = float(im.shape[0]) / scaled_im.shape[0]
@@ -177,15 +177,15 @@ def letter_probs_to_code(letter_probs):
 
 if __name__ == "__main__":
     im = cv2.imread(sys.argv[1])
-    im_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY) / 255.
-
+    print(im)
+    im_gray = cv2.cvtColor(numpy.array(im), cv2.COLOR_BGR2GRAY) / 255.
     f = numpy.load(sys.argv[2])
     param_vals = [f[n] for n in sorted(f.files, key=lambda s: int(s[4:]))]
 
     for pt1, pt2, present_prob, letter_probs in post_process(
                                                   detect(im_gray, param_vals)):
-        pt1 = tuple(reversed(map(int, pt1)))
-        pt2 = tuple(reversed(map(int, pt2)))
+        pt1 = tuple(reversed(list(map(int, pt1))))
+        pt2 = tuple(reversed(list(map(int, pt2))))
 
         code = letter_probs_to_code(letter_probs)
 
