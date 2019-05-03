@@ -161,8 +161,8 @@ def generate_code():
     return "{}{}{}{}{}{}{}{}{}".format(
         random.choice(common.DIGITS),
         random.choice(common.DIGITS),
-        " ",
         random.choice(common.LETTERS),
+        " ",
         random.choice(common.DIGITS),
         random.choice(common.DIGITS),
         random.choice(common.DIGITS),
