@@ -63,8 +63,8 @@ def code_to_vec(p, code):
 def read_data(img_glob):
     for fname in sorted(glob.glob(img_glob)):
         im = cv2.imread(fname)[:, :, 0].astype(numpy.float32) / 255.
-        code = fname.split("/")[1][9:16]
-        p = fname.split("/")[1][16] == '1'
+        code = fname.split("/")[1][9:17]
+        p = fname.split("/")[1][19] == '1'
         yield im, code_to_vec(p, code)
 
 
