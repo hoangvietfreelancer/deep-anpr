@@ -19,9 +19,8 @@ Usage is as follows:
    This step may take a while as it will extract 108,634 images.
 
 2. `./gen.py 1000`: Generate 1000 test set images in `test/`. (`test/` must not
-    already exist.) This step requires `UKNumberPlate.ttf` to be in the
-    `fonts/` directory, which can be
-    [downloaded here](http://www.dafont.com/uk-number-plate.font).
+    already exist.) This step requires `License_Plate.ttf` to be in the
+    `fonts/`
 
 3. `./train.py`: Train the model. A GPU is recommended for this step. It will
    take around 100,000 batches to converge. When you're satisfied that the
