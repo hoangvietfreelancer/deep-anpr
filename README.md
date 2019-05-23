@@ -1,4 +1,4 @@
-# Deep ANPR
+# Deep ANPR for Vietnamese plate
 
 Using neural networks to build an automatic number plate recognition system.
 See [this blog post](http://matthewearl.github.io/2016/05/06/cnn-anpr/) for an
