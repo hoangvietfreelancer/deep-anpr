@@ -24,7 +24,6 @@
 
 """
 Generate training and test images.
-
 """
 
 
@@ -159,15 +158,13 @@ def make_affine_transform(from_shape, to_shape,
 
 def generate_code():
     return "{}{}{} {}{}{}{}{}".format(
+        random.choice(common.LETTERS),
+        random.choice(common.LETTERS),
         random.choice(common.DIGITS),
         random.choice(common.DIGITS),
         random.choice(common.LETTERS),
-        #" ",
-        random.choice(common.DIGITS),
-        random.choice(common.DIGITS),
-        random.choice(common.DIGITS),
-        random.choice(common.DIGITS),
-        random.choice(common.DIGITS))
+        random.choice(common.LETTERS),
+        random.choice(common.LETTERS))
 
 
 def rounded_rect(shape, radius):
@@ -220,7 +217,7 @@ def generate_bg(num_bg_images):
     found = False
     while not found:
         fname = "bgs/{:08d}.jpg".format(random.randint(0, num_bg_images - 1))
-        bg = cv2.imread(fname, cv2.IMREAD_GRAYSCALE) / 255.
+        bg = cv2.imread(fname, cv2.CV_LOAD_IMAGE_GRAYSCALE) / 255.
         if (bg.shape[1] >= OUTPUT_SHAPE[1] and
             bg.shape[0] >= OUTPUT_SHAPE[0]):
             found = True
@@ -271,10 +268,8 @@ def load_fonts(folder_path):
 def generate_ims():
     """
     Generate number plate images.
-
     :return:
         Iterable of number plate images.
-
     """
     variation = 1.0
     fonts, font_char_ims = load_fonts(FONT_DIR)
@@ -284,11 +279,10 @@ def generate_ims():
 
 
 if __name__ == "__main__":
-    if os.path.isdir("test") == False:
-        os.mkdir("test")
+    os.mkdir("test")
     im_gen = itertools.islice(generate_ims(), int(sys.argv[1]))
     for img_idx, (im, c, p) in enumerate(im_gen):
         fname = "test/{:08d}_{}_{}.png".format(img_idx, c,
                                                "1" if p else "0")
-        print(fname)
+        print fname
         cv2.imwrite(fname, im * 255.)
