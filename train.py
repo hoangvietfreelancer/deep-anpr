@@ -64,6 +64,7 @@ def read_data(img_glob):
     for fname in sorted(glob.glob(img_glob)):
         im = cv2.imread(fname)[:, :, 0].astype(numpy.float32) / 255.
         code = fname.split("/")[1][9:17]
+        print(code)
         p = fname.split("/")[1][18] == '1'
         print(p)
         yield im, code_to_vec(p, code)

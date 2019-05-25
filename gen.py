@@ -157,14 +157,16 @@ def make_affine_transform(from_shape, to_shape,
 
 
 def generate_code():
-    return "{}{}{} {}{}{}{}{}".format(
-        random.choice(common.LETTERS),
-        random.choice(common.LETTERS),
+    return "{}{}{}{}{}{}{}{}{}".format(
         random.choice(common.DIGITS),
         random.choice(common.DIGITS),
         random.choice(common.LETTERS),
-        random.choice(common.LETTERS),
-        random.choice(common.LETTERS))
+        " ",
+        random.choice(common.DIGITS),
+        random.choice(common.DIGITS),
+        random.choice(common.DIGITS),
+        random.choice(common.DIGITS),
+        random.choice(common.DIGITS))
 
 
 def rounded_rect(shape, radius):
@@ -279,7 +281,8 @@ def generate_ims():
 
 
 if __name__ == "__main__":
-    os.mkdir("test")
+    if os.path.isdir("test") == False:
+        os.mkdir("test")
     im_gen = itertools.islice(generate_ims(), int(sys.argv[1]))
     for img_idx, (im, c, p) in enumerate(im_gen):
         fname = "test/{:08d}_{}_{}.png".format(img_idx, c,
